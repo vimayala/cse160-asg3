@@ -5,15 +5,17 @@
 // Ideas for add ons:
 //  Last 5 used colors
 var VSHADER_SOURCE =`
+    precision mediump float;
     attribute vec4 a_Position;
     attribute vec2 a_UV;
     varying vec2 v_UV;
     uniform mat4 u_ModelMatrix;
     uniform mat4 u_GlobalRotateMatrix;
-    uniform mat4 u_ViewMatrix;
-    uniform mat4 u_ProjectionMatrix;
+    // uniform mat4 u_ViewMatrix;
+    // uniform mat4 u_ProjectionMatrix;
     void main(){
-        gl_Position = u_ProjectionMatrix * u_ViewMatrix* u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
+        gl_Position = u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
+        // gl_Position = u_ProjectionMatrix * u_ViewMatrix* u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
         v_UV = a_UV;
     }`;
 
@@ -24,10 +26,8 @@ var FSHADER_SOURCE =`
   uniform vec4 u_FragColor;
   void main(){
     gl_FragColor = u_FragColor;
-    // gl_FragColor = vec4(v_UV, 1.0, 1.0);
-  }
-  `;
-
+    gl_FragColor = vec4(v_UV, 1.0, 1.0);
+  }`;
 
 // Constants
 
@@ -40,8 +40,8 @@ let a_UV;
 let u_FragColor;
 let u_Size;
 let u_ModelMatrix;
-let u_ProjectionMatrix;
-let u_ViewMatrix;
+// let u_ProjectionMatrix;
+// let u_ViewMatrix;
 let u_GlobalRotateMatrix; 
 
 
@@ -150,18 +150,6 @@ function setUpWebGL(){
 
 }
 
-
-// let canvas;
-// let gl;
-// let a_Position;
-// let a_UV;
-// let u_FragColor;
-// let u_Size;
-// let u_ModelMatrix;
-// let u_ProjectionMatrix;
-// let u_ViewMatrix;
-// let u_GlobalRotateMatrix; 
-
 function connectVariablesToGLSL(){
     // Initialize shaders
     if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
@@ -195,17 +183,17 @@ function connectVariablesToGLSL(){
         return;
     }
 
-    u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix');
-    if (!u_ViewMatrix) {
-        console.log('Failed to get the storage location of u_ViewMatrix');
-        return;
-    }
+    // u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix');
+    // if (!u_ViewMatrix) {
+    //     console.log('Failed to get the storage location of u_ViewMatrix');
+    //     return;
+    // }
 
-    u_ProjectionMatrix = gl.getUniformLocation(gl.program, 'u_ProjectionMatrix');
-    if (!u_ProjectionMatrix) {
-        console.log('Failed to get the storage location of u_ProjectionMatrix');
-        return;
-    }
+    // u_ProjectionMatrix = gl.getUniformLocation(gl.program, 'u_ProjectionMatrix');
+    // if (!u_ProjectionMatrix) {
+    //     console.log('Failed to get the storage location of u_ProjectionMatrix');
+    //     return;
+    // }
 
     u_GlobalRotateMatrix = gl.getUniformLocation(gl.program, 'u_GlobalRotateMatrix');
     if (!u_GlobalRotateMatrix) {
