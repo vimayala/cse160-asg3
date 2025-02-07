@@ -10,9 +10,9 @@ var VSHADER_SOURCE =`
     attribute vec2 a_UV;
     varying vec2 v_UV;
     uniform mat4 u_ModelMatrix;
-    uniform mat4 u_GlobalRotateMatrix;
-    uniform mat4 u_ViewMatrix;
-    uniform mat4 u_ProjectionMatrix;
+    uniform mat4 u_GlobalRotateMatrix;      // Setting global rotation
+    uniform mat4 u_ViewMatrix;              // Set by LookAt
+    uniform mat4 u_ProjectionMatrix;        // Set by GL perspective command...eventually
     void main(){
         // gl_Position = u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
         gl_Position = u_ProjectionMatrix * u_ViewMatrix* u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
@@ -25,10 +25,24 @@ var FSHADER_SOURCE =`
   varying vec2 v_UV;
   uniform vec4 u_FragColor;
   uniform sampler2D u_Sampler0;
+  uniform int u_whichTexture;
   void main(){
-    gl_FragColor = u_FragColor;
-    gl_FragColor = texture2D(u_Sampler0, v_UV);
+    if(u_whichTexture == -2){                   // Solid color
+        gl_FragColor = u_FragColor;
+    }
+    else if(u_whichTexture == -1){              // UV texture
         gl_FragColor = vec4(v_UV, 1.0, 1.0);
+    }
+    else if (u_whichTexture == 0){              // Texture
+        gl_FragColor = texture2D(u_Sampler0, v_UV);
+    }
+    else{                                           // Error shows red
+        gl_FragColor = vec4(1.0, 0.2, 0.2, 1.0);}
+
+    // gl_FragColor = u_FragColor;
+    // // gl_FragColor = vec4(v_UV, 1.0, 1.0);
+
+    // gl_FragColor = texture2D(u_Sampler0, v_UV);
 
   }`;
 
@@ -47,38 +61,54 @@ let u_ProjectionMatrix;
 let u_ViewMatrix;
 let u_GlobalRotateMatrix; 
 let u_Sampler0;
+let u_whichTexture
 let texture;
+
+var g_eye = [0, 0, 3];;
+var g_at = [0, 0, -100];
+var g_up = [0, 1, 0];
+
+//      Can add more for perspective ^^
+// consider changing to vec3 so you can do
+// moving forward
+// d is direction vector
+    // d = at - eye
+    // d = d.normalize()
+    // eye = eye + d
+    // at = at + d
+// moving left
+        // need vector orthogonal to d
+    // d = at - eye
+    // left = d.cross(up)           // cross product of d x up
+
+// atPoint = directionVector = at - eye
+// r = sqrt ((direction x ^2) + (direction y ^2))
+// theta = arc tan (direction y, direction x)
+// theta = theta + 5 degrees (<-- aka angle, will be in radians likely)
+// new x = r * cos(theta)
+// new y = r * sin(theta)
+// d = (new x, new y)
+// at = eye + d
 
 
 // Global variables for HTML action
 let g_clearColorR = 0.0;
 let g_clearColorG = 0.0;
 let g_clearColorB = 0.0;
-// let g_selectedColor = [1.0, 1.0, 1.0, 1.0]
-// let g_selectedSize = 5;
-// let g_selectedType = POINT;
-// let g_selectedSegments = 12;
 
 let g_globalAngleX = 0;
 let g_globalAngleY = 15;
 let g_globalAngleZ = 0;
 
-
 let g_yellowAngle = 0;
 let g_MagentaAngle = 0;
-// let g_walkingAngle = 0;
-// let g_LegAngle = 0;
-// let g_BodyAngle = 0;
-
-
-
-var g_shapesList = [];
 
 
 function main() {
     setUpWebGL();
     connectVariablesToGLSL();
     addActionForHTMLUI();
+    document.onkeydown = keydown;
     initTextures(gl, 0);
 
     // canvas.addEventListener("mousedown", () => g_isDragging = true);
@@ -93,10 +123,10 @@ function main() {
 var g_startTime = performance.now() / 1000.0 ;
 var g_seconds = performance.now() / 1000.0 - g_startTime;
 
-var g_yellowAnimation = true;
+var g_yellowAnimation = false;
 var g_magentaAnimation = false;
-var g_walkingAnimation = true;
-var g_legAnimation = true;
+// var g_walkingAnimation = true;
+// var g_legAnimation = true;
 
 
 let g_lastX = null;
@@ -214,7 +244,11 @@ function connectVariablesToGLSL(){
         return false;
     }
 
-
+    u_whichTexture = gl.getUniformLocation(gl.program, 'u_whichTexture'); 
+    if(!u_whichTexture){
+        console.log('Failed to get the storage location of u_whichTexture');
+        return false;
+    }
 
     var identityM = new Matrix4();
     gl.uniformMatrix4fv(u_ModelMatrix, false, identityM.elements);
@@ -224,7 +258,7 @@ function connectVariablesToGLSL(){
 
 }
 
-
+// Adjusted from Ch 5
 function initTextures(){ 
     var image = new Image(); // Create an image object
     if(!image){
@@ -232,19 +266,24 @@ function initTextures(){
         return false;
     }
     // Register the event handler to be called on loading an image
-    image.onload = function(){ sendTextureToGLSL(image); };
+    image.onload = function(){ sendImageToTEXTURE0(image); };
 
     // Tell the browser to load an image
     image.src = '../resources/sky.jpg';
 
+    //                                                              Add more texture images here!
+
     return true;
 }
 
-function sendTextureToGLSL(image){
+// Adjusted from Ch 5 
+// Can be adjusted more to allow per image and sampler
+// Currently for 1 image and 1 sampler
+function sendImageToTEXTURE0(image){
 
     // Create a texture object
     var texture = gl.createTexture();
-    if(!texture){
+    if(!texture){ 
         console.log('Failed to create the texture object');
         return false;
     } 
@@ -266,6 +305,8 @@ function sendTextureToGLSL(image){
     
     // Set the texture unit 0 to the sampler
     gl.uniform1i(u_Sampler0, 0);
+
+    console.log('World.js: Texture loaded');
 }
 
 function addActionForHTMLUI(){
@@ -302,8 +343,8 @@ function addActionForHTMLUI(){
     document.getElementById('animateFeetButtonON').onclick = function () {g_magentaAnimation = true};
     document.getElementById('animateFeetButtonOFF').onclick = function () {g_magentaAnimation = false};
 
-    document.getElementById('animateDogWalkingButtonON').onclick = function () {g_walkingAnimation = true};
-    document.getElementById('animateDogWalkingButtonOFF').onclick = function () {g_walkingAnimation = false};
+    // document.getElementById('animateDogWalkingButtonON').onclick = function () {g_walkingAnimation = true};
+    // document.getElementById('animateDogWalkingButtonOFF').onclick = function () {g_walkingAnimation = false};
 
 
     document.getElementById('magentaSlider').addEventListener('mousemove', function() { 
@@ -341,34 +382,51 @@ function updateAnimationAngles(){
         g_MagentaAngle = 45 * Math.sin(2.5 * g_seconds);
     }
 
-    // if(g_walkingAnimation){
-    //     g_walkingAngle = 7 * Math.sin((3 * g_seconds));
-    //     g_BodyAngle = 45 * Math.sin(2.5 * g_seconds);
+}
+
+function keydown(ev){
+    // Right arrow key event
+    if(ev.keyCode == 39){
+        g_eye[0] += 0.2;
+    }
+    // Left arrow key event
+    if(ev.keyCode == 37){
+        g_eye[0] -= 0.2;
+    }
+    // Up arrow key event
+    // if(ev.keyCode == 38){
+        
     // }
 
-    // if(g_legAnimation){
-    //     g_LegAngle = 7 * Math.sin((3 * g_seconds));
-    // }
+    renderScene();
+    console.log("Key down: " + ev.keyCode);
 }
 
 function renderScene(){
     var startTime = performance.now();
 
+    // Pass projection matrix
+    var projMat = new Matrix4();
+    //                      fovy,   aspect,                 near, far
+    projMat.setPerspective(50, canvas.width / canvas.height, 1, 100);
+    gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
+
+    var viewMat = new Matrix4();
+    //                  eyes,       at,          up
+    viewMat.setLookAt(g_eye[0], g_eye[1], g_eye[2],     g_at[0], g_at[1],g_at[2],     g_up[0], g_up[1],g_up[2],);
+    gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
+
+
     // Rotate different axis
-    let globalRotMat = new Matrix4()
-    .rotate(g_globalAngleX, 1, 0, 0) 
-    .rotate(g_globalAngleY, 0, 1, 0) 
-    .rotate(g_globalAngleZ, 0, 0, 1);
-
-
+    var globalRotMat = new Matrix4().rotate(g_globalAngleX, 1, 0, 0) .rotate(g_globalAngleY, 0, 1, 0) .rotate(g_globalAngleZ, 0, 0, 1);
     gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
 
     // Clear <canvas>
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
     // gl.clear(gl.COLOR_BUFFER_BIT);
     
-
     var red = new Cube();
+    red.textureNum = 0
     red.color = [1.0, 0.0, 0.0, 1.0];
     red.matrix.translate(-0.25, -0.75, 0.0);
     red.matrix.rotate(-5, 1, 0, 0);
@@ -386,6 +444,7 @@ function renderScene(){
 
     var magenta = new Cube();
     magenta.color = [1.0, 0.0, 1.0, 1.0];
+    magenta.textureNum = 0;
     magenta.matrix = yellowCoordMatrix;
     magenta.matrix.translate(0, 0.65, 0);
     magenta.matrix.rotate(g_MagentaAngle, 0, 0, 1);
