@@ -47,7 +47,8 @@ var FSHADER_SOURCE =`
   }`;
 
 // Constants
-
+const SPEED = 0.1;
+const ALPHA = 1;
 
 // Defining global variables
 let canvas;
@@ -402,29 +403,29 @@ function keydown(ev){
     // Right arrow key event
     if(ev.keyCode == 39 || ev.keyCode == 68){
         // g_Camera.eye.elements[0] += 0.2;
-        g_Camera.right();
+        g_Camera.right(SPEED);
     }
     // Left arrow key event
     if(ev.keyCode == 37 | ev.keyCode == 65){
         // g_Camera.eye.elements[0] -= 0.2;
-        g_Camera.left();
+        g_Camera.left(SPEED);
     }
     // Up arrow key event
     if(ev.keyCode == 38 | ev.keyCode == 87){
-        g_Camera.forward();
+        g_Camera.forward(SPEED);
     }
     // Down arrow key event
     if(ev.keyCode == 40 | ev.keyCode == 83){
-        g_Camera.backward();
+        g_Camera.backward(SPEED);
     }
     // Q (Left Pan) key event
     if(ev.keyCode == 81){
-        g_Camera.panLeft();
+        g_Camera.panLeft(ALPHA);
     }
 
     // E (Right Pan) key event
     if(ev.keyCode == 69){
-        g_Camera.panRight();
+        g_Camera.panRight(ALPHA);
     }
 
     renderScene();
