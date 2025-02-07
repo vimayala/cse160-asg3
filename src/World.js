@@ -24,9 +24,12 @@ var FSHADER_SOURCE =`
   precision mediump float;
   varying vec2 v_UV;
   uniform vec4 u_FragColor;
+  uniform sampler2D u_Sampler0;
   void main(){
     gl_FragColor = u_FragColor;
-    gl_FragColor = vec4(v_UV, 1.0, 1.0);
+    gl_FragColor = texture2D(u_Sampler0, v_UV);
+        gl_FragColor = vec4(v_UV, 1.0, 1.0);
+
   }`;
 
 // Constants
@@ -43,6 +46,8 @@ let u_ModelMatrix;
 let u_ProjectionMatrix;
 let u_ViewMatrix;
 let u_GlobalRotateMatrix; 
+let u_Sampler0;
+let texture;
 
 
 // Global variables for HTML action
@@ -74,6 +79,7 @@ function main() {
     setUpWebGL();
     connectVariablesToGLSL();
     addActionForHTMLUI();
+    initTextures(gl, 0);
 
     // canvas.addEventListener("mousedown", () => g_isDragging = true);
     // canvas.addEventListener("mouseup", () => g_isDragging = false);
@@ -201,6 +207,13 @@ function connectVariablesToGLSL(){
         return;
     }
 
+    // Get the storage location of the u_Sampler
+    u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0'); 
+    if(!u_Sampler0){
+        console.log('Failed to get the storage location of u_Sampler0');
+        return false;
+    }
+
 
 
     var identityM = new Matrix4();
@@ -209,6 +222,50 @@ function connectVariablesToGLSL(){
     gl.uniformMatrix4fv(u_ProjectionMatrix, false, identityM.elements);
 
 
+}
+
+
+function initTextures(){ 
+    var image = new Image(); // Create an image object
+    if(!image){
+        console.log('Failed to create the image object');
+        return false;
+    }
+    // Register the event handler to be called on loading an image
+    image.onload = function(){ sendTextureToGLSL(image); };
+
+    // Tell the browser to load an image
+    image.src = '../resources/sky.jpg';
+
+    return true;
+}
+
+function sendTextureToGLSL(image){
+
+    // Create a texture object
+    var texture = gl.createTexture();
+    if(!texture){
+        console.log('Failed to create the texture object');
+        return false;
+    } 
+
+    // Flip the image's y axis
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+
+    // Enable the texture unit 0
+    gl.activeTexture(gl.TEXTURE0);
+
+    // Bind the texture object to the target
+    gl.bindTexture(gl.TEXTURE_2D, texture); 
+
+    // Set the texture parameters
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+    // Set the texture image
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);   
+    
+    // Set the texture unit 0 to the sampler
+    gl.uniform1i(u_Sampler0, 0);
 }
 
 function addActionForHTMLUI(){
