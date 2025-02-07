@@ -64,11 +64,18 @@ let u_Sampler0;
 let u_whichTexture
 let texture;
 
-var g_eye = [0, 0, 3];;
-var g_at = [0, 0, -100];
-var g_up = [0, 1, 0];
+// var g_eye = [0, 0, 3];
+// var g_at = [0, 0, -100];
+// var g_up = [0, 1, 0];
 
-var g_camera = new Camera();
+
+
+
+// var g_eye = new Vector3({0: 0, 1: 0, 2: 3});
+// var g_at = new Vector3({0: 0, 1: 0, 2: -100});
+// var g_up = new Vector3({0: 0, 1: 1, 2: 0});
+var g_Camera = new Camera();
+
 
 //      Can add more for perspective ^^
 // consider changing to vec3 so you can do
@@ -387,19 +394,30 @@ function updateAnimationAngles(){
 }
 
 function keydown(ev){
+
+
+                // currently works, jumps by a lot
+
+
     // Right arrow key event
     if(ev.keyCode == 39){
-        g_eye[0] += 0.2;
+        // g_Camera.eye.elements[0] += 0.2;
+        g_Camera.right();
     }
     // Left arrow key event
     if(ev.keyCode == 37){
-        g_eye[0] -= 0.2;
+        // g_Camera.eye.elements[0] -= 0.2;
+        g_Camera.left();
     }
     // Up arrow key event
-    // if(ev.keyCode == 38){
-        
-    // }
+    if(ev.keyCode == 38){
+        g_Camera.forward();
+    }
 
+    // Down arrow key event
+    if(ev.keyCode == 40){
+        g_Camera.backward();
+    }
     renderScene();
     console.log("Key down: " + ev.keyCode);
 }
@@ -415,7 +433,9 @@ function renderScene(){
 
     var viewMat = new Matrix4();
     //                  eyes,       at,          up
-    viewMat.setLookAt(g_eye[0], g_eye[1], g_eye[2],     g_at[0], g_at[1],g_at[2],     g_up[0], g_up[1],g_up[2],);
+    viewMat.setLookAt(g_Camera.eye.elements[0], g_Camera.eye.elements[1], g_Camera.eye.elements[2],     
+                      g_Camera.at.elements[0], g_Camera.at.elements[1],g_Camera.at.elements[2],     
+                      g_Camera.up.elements[0], g_Camera.up.elements[1],g_Camera.up.elements[2],);
     gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
 
 
