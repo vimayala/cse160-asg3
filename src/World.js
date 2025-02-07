@@ -68,6 +68,8 @@ var g_eye = [0, 0, 3];;
 var g_at = [0, 0, -100];
 var g_up = [0, 1, 0];
 
+var g_camera = new Camera();
+
 //      Can add more for perspective ^^
 // consider changing to vec3 so you can do
 // moving forward
