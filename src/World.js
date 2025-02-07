@@ -400,24 +400,33 @@ function keydown(ev){
 
 
     // Right arrow key event
-    if(ev.keyCode == 39){
+    if(ev.keyCode == 39 || ev.keyCode == 68){
         // g_Camera.eye.elements[0] += 0.2;
         g_Camera.right();
     }
     // Left arrow key event
-    if(ev.keyCode == 37){
+    if(ev.keyCode == 37 | ev.keyCode == 65){
         // g_Camera.eye.elements[0] -= 0.2;
         g_Camera.left();
     }
     // Up arrow key event
-    if(ev.keyCode == 38){
+    if(ev.keyCode == 38 | ev.keyCode == 87){
         g_Camera.forward();
     }
-
     // Down arrow key event
-    if(ev.keyCode == 40){
+    if(ev.keyCode == 40 | ev.keyCode == 83){
         g_Camera.backward();
     }
+    // Q (Left Pan) key event
+    if(ev.keyCode == 81){
+        g_Camera.panLeft();
+    }
+
+    // E (Right Pan) key event
+    if(ev.keyCode == 69){
+        g_Camera.panRight();
+    }
+
     renderScene();
     console.log("Key down: " + ev.keyCode);
 }
