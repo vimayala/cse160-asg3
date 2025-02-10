@@ -414,20 +414,20 @@ function keydown(ev){
     // Right arrow key event
     if(ev.keyCode == 39 || ev.keyCode == 68){
         // g_Camera.eye.elements[0] += 0.2;
-        g_Camera.right(SPEED);
+        g_Camera.moveRight(SPEED);
     }
     // Left arrow key event
     if(ev.keyCode == 37 | ev.keyCode == 65){
         // g_Camera.eye.elements[0] -= 0.2;
-        g_Camera.left(SPEED);
+        g_Camera.moveLeft(SPEED);
     }
     // Up arrow key event
     if(ev.keyCode == 38 | ev.keyCode == 87){
-        g_Camera.forward(SPEED);
+        g_Camera.moveForward(SPEED);
     }
     // Down arrow key event
     if(ev.keyCode == 40 | ev.keyCode == 83){
-        g_Camera.backward(SPEED);
+        g_Camera.moveBackward(SPEED);
     }
     // Q (Left Pan) key event
     if(ev.keyCode == 81){
