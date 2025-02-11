@@ -21,15 +21,17 @@ var VSHADER_SOURCE =`
 
 // Fragment shader program
 var FSHADER_SOURCE =`
-  precision mediump float;
-  varying vec2 v_UV;
-  uniform vec4 u_FragColor;
-  uniform sampler2D u_Sampler0;
+    precision mediump float;
+    varying vec2 v_UV;
+    uniform vec4 u_FragColor;
+    uniform sampler2D u_Sampler0;
     uniform sampler2D u_Sampler1;
 
-  uniform int u_whichTexture;
-  void main(){
-    if(u_whichTexture == -3){
+    uniform int u_whichTexture;
+
+    
+    void main(){
+    if(u_whichTexture == -3){                           // Ground texture  
         gl_FragColor = texture2D(u_Sampler1, v_UV);
     }
     else if(u_whichTexture == -2){                   // Solid color
@@ -38,7 +40,7 @@ var FSHADER_SOURCE =`
     else if(u_whichTexture == -1){              // UV texture
         gl_FragColor = vec4(v_UV, 1.0, 1.0);
     }
-    else if (u_whichTexture == 0){              // Texture
+    else if (u_whichTexture == 0){              // Dirt Texture
         gl_FragColor = texture2D(u_Sampler0, v_UV);
         
     }
@@ -51,7 +53,7 @@ var FSHADER_SOURCE =`
 
     // gl_FragColor = texture2D(u_Sampler0, v_UV);
 
-  }`;
+    }`;
 
 // Constants
 const SPEED = 0.1;
@@ -122,6 +124,14 @@ let g_globalAngleZ = 0;
 let g_yellowAngle = 0;
 let g_MagentaAngle = 0;
 
+// Mouse control variables
+let isMouseControlled = false;
+
+// Set the initial mouse position
+let lastX = 0;
+let lastY = 0;
+
+
 
 function main() {
     setUpWebGL();
@@ -130,10 +140,54 @@ function main() {
     document.onkeydown = keydown;
     initTextures(gl, 0);
 
-    // canvas.addEventListener("mousedown", () => g_isDragging = true);
-    // canvas.addEventListener("mouseup", () => g_isDragging = false);
-    // canvas.addEventListener("mouseleave", () => g_isDragging = false);
-    // canvas.addEventListener("mousemove", handleMouseMove);
+    // canvas.addEventListener('mousedown', (event) => g_Camera.handleMouseDown(event));
+    // canvas.addEventListener('mousemove', (event) => g_Camera.handleMouseMove(event));
+    // canvas.addEventListener('mouseup', (event) => g_Camera.handleMouseUp(event));
+
+    // Asked ChatGPT for help calling the mouse functions in order to make it more "video game like",
+    //              reworked it because it spit out bad code
+    // Add event listeners
+    canvas.addEventListener('mousedown', (event) => {
+        // Set mouse control state to true when mouse is pressed down
+        isMouseControlled = true;
+        
+        // Record the mouse position when mouse is pressed
+        lastX = event.clientX;
+        lastY = event.clientY;
+    });
+    
+    canvas.addEventListener('mousemove', (event) => {
+        if (isMouseControlled) {
+            const newX = event.clientX - lastX;
+            const newY = event.clientY - lastY;
+    
+            const panSpeed = 0.3; 
+    
+            if (newX !== 0) {
+                g_Camera.panRight(newX * panSpeed);
+            }
+    
+            if (newY !== 0) {
+                if (newY > 0) {
+                    g_Camera.panUp(newY * panSpeed); 
+                } else {
+                    g_Camera.panDown(-newY * panSpeed);  
+                }
+            }
+            lastX = event.clientX;
+            lastY = event.clientY;
+        }
+    });
+    
+    // Stop mouse controls when ESC/leaving mouse
+    canvas.addEventListener('mouseup', () => {
+        isMouseControlled = false;
+    });
+    
+    // canvas.addEventListener('mouseleave', () => {
+    //     isMouseControlled = false;
+    // });
+    
 
     clearCanvas();
     renderScene()
@@ -144,37 +198,6 @@ var g_seconds = performance.now() / 1000.0 - g_startTime;
 
 var g_yellowAnimation = false;
 var g_magentaAnimation = false;
-// var g_walkingAnimation = true;
-// var g_legAnimation = true;
-
-
-let g_lastX = null;
-let g_lastY = null;
-let g_sensitivity = 0.5; // Adjust for smoother/faster rotation
-let g_isDragging = false; 
-
-// Asked ChatGPT for this - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-// function handleMouseMove(event) {
-//     if (!g_isDragging) return; // Only rotate if mouse is held down
-
-//     if (g_lastX === null || g_lastY === null) {
-//         g_lastX = event.clientX;
-//         g_lastY = event.clientY;
-//         return;
-//     }
-
-//     let deltaX = event.clientX - g_lastX;
-//     let deltaY = event.clientY - g_lastY;
-
-//     g_globalAngleY += deltaX * g_sensitivity; // Rotate around Y-axis (left-right)
-//     g_globalAngleZ += deltaY * g_sensitivity; // Rotate around Z-axis (up-down)
-
-//     g_lastX = event.clientX;
-//     g_lastY = event.clientY;
-
-//     renderScene();
-// }
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 function tick(){
     g_seconds = (performance.now() / 1000.0 - g_startTime) * 1.5;
@@ -295,8 +318,8 @@ function initTextures() {
     image0.onload = function() { sendImageToTexture(image0, 0); };
     image1.onload = function() { sendImageToTexture(image1, 1); };
 
-    image0.src = '../resources/sky.jpg';
-    image1.src = '../resources/uvCoords.png';
+    image0.src = '../resources/dirt.jpg';
+    image1.src = '../resources/grassTop.jpg';
 
     return true;
 }
@@ -319,6 +342,12 @@ function sendImageToTexture(image, texUnit) {
         gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.uniform1i(u_Sampler1, 1); // Bind texture1 to sampler1
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+
+
     }
 
     // Set texture parameters
@@ -417,16 +446,16 @@ function keydown(ev){
         g_Camera.moveRight(SPEED);
     }
     // Left arrow key event
-    if(ev.keyCode == 37 | ev.keyCode == 65){
+    if(ev.keyCode == 37 || ev.keyCode == 65){
         // g_Camera.eye.elements[0] -= 0.2;
         g_Camera.moveLeft(SPEED);
     }
     // Up arrow key event
-    if(ev.keyCode == 38 | ev.keyCode == 87){
+    if(ev.keyCode == 38 || ev.keyCode == 87){
         g_Camera.moveForward(SPEED);
     }
     // Down arrow key event
-    if(ev.keyCode == 40 | ev.keyCode == 83){
+    if(ev.keyCode == 40 || ev.keyCode == 83){
         g_Camera.moveBackward(SPEED);
     }
     // Q (Left Pan) key event
@@ -468,20 +497,11 @@ function renderScene(){
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
     // gl.clear(gl.COLOR_BUFFER_BIT);
     
-    // var ground = new Cube();
-    // ground.textureNum = -2;
-    // ground.color = [1.0, 0.2, 0.5, 1.0];
-    // ground.matrix.translate(-15, -33, -15.0);
-    // // groundred.matrix.rotate(-5, 1, 0, 0);
-    // ground.matrix.scale(32, 32, 32);
-    // ground.render();
-
-
     var ground = new Cube();
     ground.textureNum = -3;
     ground.color = [1.0, 0.2, 0.5, 1.0];
     ground.matrix.translate(0, -0.75, 0);
-    ground.matrix.scale(10, 0, 10);
+    ground.matrix.scale(50, 0, 50);
     ground.matrix.translate(-0.5, 0, -0.5);
     ground.render();
 
@@ -513,6 +533,26 @@ function renderScene(){
     magenta.matrix.translate(-0.5, 0.0, -0.001);
     magenta.render();
 
+
+
+    var sky = new Cube();
+    sky.textureNum = -2;
+    sky.color = [0.3, 0.45, 0.9, 1.0];
+    sky.matrix.translate(0, -1, 0);
+    sky.matrix.scale(50, 50, 50);
+    sky.matrix.translate(-0.5, 0, -0.5);
+    sky.render();
+
+
+    var box = new Cube();
+    box.textureNum = 0;
+    box.color = [1.0, 0.2, 0.5, 1.0];
+    // box.matrix.translate(0, -1, 0);
+    box.matrix.scale(0.5, 0.5, 0.5);
+    box.matrix.translate(0, -1.5, 0);
+
+    // box.matrix.translate(-0.5, 0, -0.5);
+    box.render();
 
 
     var duration = performance.now() - startTime;
