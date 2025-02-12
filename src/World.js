@@ -8,6 +8,9 @@ var VSHADER_SOURCE =`
     precision mediump float;
     attribute vec4 a_Position;
     attribute vec2 a_UV;
+    attribute vec2 a_TexCoord;
+    varying vec2 v_TexCoord;   // Pass to fragment shader
+
     varying vec2 v_UV;
     uniform mat4 u_ModelMatrix;
     uniform mat4 u_GlobalRotateMatrix;      // Setting global rotation
@@ -17,31 +20,42 @@ var VSHADER_SOURCE =`
         // gl_Position = u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
         gl_Position = u_ProjectionMatrix * u_ViewMatrix* u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
         v_UV = a_UV;
+        v_TexCoord = a_TexCoord;
+
     }`;
 
 // Fragment shader program
 var FSHADER_SOURCE =`
     precision mediump float;
-    varying vec2 v_UV;
     uniform vec4 u_FragColor;
     uniform sampler2D u_Sampler0;
     uniform sampler2D u_Sampler1;
+    varying vec2 v_TexCoord;
+    varying vec2 v_UV;
+
+
 
     uniform int u_whichTexture;
 
     
     void main(){
     if(u_whichTexture == -3){                           // Ground texture  
-        gl_FragColor = texture2D(u_Sampler1, v_UV);
+        // gl_FragColor = texture2D(u_Sampler1, v_UV);
+        gl_FragColor = texture2D(u_Sampler1, v_TexCoord);
+
     }
     else if(u_whichTexture == -2){                   // Solid color
         gl_FragColor = u_FragColor;
     }
     else if(u_whichTexture == -1){              // UV texture
-        gl_FragColor = vec4(v_UV, 1.0, 1.0);
+        // gl_FragColor = vec4(v_UV, 1.0, 1.0);
+        gl_FragColor = vec4(v_TexCoord, 1.0, 1.0);
+
     }
     else if (u_whichTexture == 0){              // Dirt Texture
-        gl_FragColor = texture2D(u_Sampler0, v_UV);
+        // gl_FragColor = texture2D(u_Sampler0, v_UV);
+        gl_FragColor = texture2D(u_Sampler0, v_TexCoord);
+
         
     }
     else{                                           // Error shows red
@@ -75,6 +89,16 @@ let u_Sampler1;
 
 let u_whichTexture
 let texture;
+
+var map = [
+    [1, 0, 0, 1],
+    [1, 1, 0, 1],
+    [1, 0, 0, 1],
+    [1, 1, 1, 1]
+];
+
+var walls = [];
+
 
 // var g_eye = [0, 0, 3];
 // var g_at = [0, 0, -100];
@@ -189,7 +213,8 @@ function main() {
     // });
     
 
-    clearCanvas();
+
+    // clearCanvas();
     renderScene()
     requestAnimationFrame(tick);
 }
@@ -239,6 +264,12 @@ function connectVariablesToGLSL(){
     a_Position = gl.getAttribLocation(gl.program, 'a_Position');
     if (a_Position < 0) {
         console.log('Failed to get the storage location of a_Position');
+        return;
+    }
+
+    a_TexCoord = gl.getAttribLocation(gl.program, 'a_TexCoord');
+    if (a_TexCoord < 0) {
+        console.log('Failed to get the storage location of a_TexCoord');
         return;
     }
 
@@ -469,7 +500,7 @@ function keydown(ev){
     }
 
     renderScene();
-    console.log("Key down: " + ev.keyCode);
+    // console.log("Key down: " + ev.keyCode);
 }
 
 function renderScene(){
@@ -515,7 +546,8 @@ function renderScene(){
     red.render();
 
     var yellow = new Cube();
-    yellow.color = [1.0, 1.0, 0.0, 1.0];
+    yellow.textureNum = -1;
+    yellow.color = [0.0, 1.0, 0.0, 1.0];
     yellow.matrix.translate(-0.0, -0.5, 0.0);
     yellow.matrix.rotate(g_yellowAngle, 0.0, 0.0, 1);
     var yellowCoordMatrix = new Matrix4(yellow.matrix);
@@ -557,6 +589,7 @@ function renderScene(){
 
     var duration = performance.now() - startTime;
     sendTextToHTML(" ms: " + Math.floor(duration) + " fps: " + Math.floor(10000/duration) / 10, "numdot");
+    
 }
 
 // Send text to HTML, used for duration of renderScene in this files 
