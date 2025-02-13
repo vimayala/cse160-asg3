@@ -90,7 +90,7 @@ let u_whichTexture
 let texture;
 
 var map = [
-    [3, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 2],
+    [3, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, , 0, 0,       0, 0, 0, 0,       0, 0, 0, 2],
     [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
     [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
     [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
@@ -102,17 +102,14 @@ var map = [
     [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
     [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
     [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
-    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
-    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
-    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     1, 0, 3, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
-    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
-    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 2,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
-    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
-    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 1, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 1],
     [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
     [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
     [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
     [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 1],
     [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
     [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
     [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
@@ -121,7 +118,10 @@ var map = [
     [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
     [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
     [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
-    [1, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 1, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 4],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [1, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 4],
 ];
 
 var walls = [];
@@ -194,6 +194,7 @@ let isMouseControlled = false;
 let lastX = 0;
 let lastY = 0;
 
+const distance = 5;  // The block will be placed 5 units in front of the camera
 
 
 function main() {
@@ -247,6 +248,19 @@ function main() {
         isMouseControlled = false;
     });
     
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'b') {  // 'b' key to add block
+            const blockPosition = g_Camera.addBlock(distance);
+            // Update scene with the new block position
+            console.log("Calculated Block Position: ", blockPosition);
+
+            genMap(blockPosition);
+
+
+        }
+    });
+
     // canvas.addEventListener('mouseleave', () => {
     //     isMouseControlled = false;
     // });
@@ -255,7 +269,6 @@ function main() {
 
     // clearCanvas();
     renderScene()
-    genMap();
     requestAnimationFrame(tick);
 }
 var g_startTime = performance.now() / 1000.0 ;
@@ -416,7 +429,7 @@ function sendImageToTexture(image, texUnit) {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 
 
     }
@@ -431,32 +444,32 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 }
 
 function addActionForHTMLUI(){
-    document.getElementById('whiteCanvas').onclick = function () { 
-        g_clearColorR = 1.0;
-        g_clearColorG = 1.0
-        g_clearColorB = 1.0;
-        gl.clearColor(g_clearColorR, g_clearColorG, g_clearColorB, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        renderScene(); 
+    // document.getElementById('whiteCanvas').onclick = function () { 
+    //     g_clearColorR = 1.0;
+    //     g_clearColorG = 1.0
+    //     g_clearColorB = 1.0;
+    //     gl.clearColor(g_clearColorR, g_clearColorG, g_clearColorB, 1.0);
+    //     gl.clear(gl.COLOR_BUFFER_BIT);
+    //     renderScene(); 
 
-    };
-    document.getElementById('creamCanvas').onclick = function () { 
-        g_clearColorR = 1;
-        g_clearColorG = 0.97;
-        g_clearColorB = 0.89;
-        gl.clearColor(g_clearColorR, g_clearColorG, g_clearColorB, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        renderScene(); 
+    // };
+    // document.getElementById('creamCanvas').onclick = function () { 
+    //     g_clearColorR = 1;
+    //     g_clearColorG = 0.97;
+    //     g_clearColorB = 0.89;
+    //     gl.clearColor(g_clearColorR, g_clearColorG, g_clearColorB, 1.0);
+    //     gl.clear(gl.COLOR_BUFFER_BIT);
+    //     renderScene(); 
 
-    };
-    document.getElementById('blackCanvas').onclick = function () { 
-        g_clearColorR = 0.0;
-        g_clearColorG = 0.0
-        g_clearColorB = 0.0;
-        gl.clearColor(g_clearColorR, g_clearColorG, g_clearColorB, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        renderScene(); 
-    };
+    // };
+    // document.getElementById('blackCanvas').onclick = function () { 
+    //     g_clearColorR = 0.0;
+    //     g_clearColorG = 0.0
+    //     g_clearColorB = 0.0;
+    //     gl.clearColor(g_clearColorR, g_clearColorG, g_clearColorB, 1.0);
+    //     gl.clear(gl.COLOR_BUFFER_BIT);
+    //     renderScene(); 
+    // };
 
     document.getElementById('yellowButtonON').onclick = function () {g_yellowAnimation = true};
     document.getElementById('yellowButtonOFF').onclick = function () {g_yellowAnimation = false};
@@ -587,37 +600,6 @@ function renderScene(){
     ground.matrix.translate(-0.5, 0, -0.5);
     ground.render();
 
-
-    // var red = new Cube();
-    // red.textureNum = 0
-    // red.color = [1.0, 0.0, 0.0, 1.0];
-    // red.matrix.translate(-0.25, -0.75, 0.0);
-    // red.matrix.rotate(-5, 1, 0, 0);
-    // red.matrix.scale(0.5, 0.3, 0.5);
-    // red.render();
-
-    // var yellow = new Cube();
-    // yellow.textureNum = -1;
-    // yellow.color = [0.0, 1.0, 0.0, 1.0];
-    // yellow.matrix.translate(-0.0, -0.5, 0.0);
-    // yellow.matrix.rotate(g_yellowAngle, 0.0, 0.0, 1);
-    // var yellowCoordMatrix = new Matrix4(yellow.matrix);
-    // yellow.matrix.scale(0.25, 0.7, 0.5);
-    // yellow.matrix.translate(-0.5, 0.0, 0.0);
-    // yellow.render();
-
-    // var magenta = new Cube();
-    // magenta.color = [1.0, 0.0, 1.0, 1.0];
-    // magenta.textureNum = 0;
-    // magenta.matrix = yellowCoordMatrix;
-    // magenta.matrix.translate(0, 0.65, 0);
-    // magenta.matrix.rotate(g_MagentaAngle, 0, 0, 1);
-    // magenta.matrix.scale(0.3, 0.3, 0.3);
-    // magenta.matrix.translate(-0.5, 0.0, -0.001);
-    // magenta.render();
-
-
-
     var sky = new Cube();
     sky.textureNum = -2;
     sky.color = [0.3, 0.45, 0.9, 1.0];
@@ -682,25 +664,44 @@ function sendTextToHTML(text, htmlID){
 
 // var maxHeight = 10; // Maximum height for a wall, can be adjusted
 
-function genMap(){
+function genMap(blockCoords){
 
-    // // Loop over the map
     // for (var x = 0; x < map.length; x++) {
     //     for (var z = 0; z < map[x].length; z++) {
-    //         // If the value at the current map position is 1, create a "wall" at height
-    //         if (map[x][z] == 1) {
-    //             var height = map[x][z] * 3;
+    //         // If the value at the current map position is 1, create a wall
+    //         // if (map[x][z] == 1) {
+    //         if (map[x][z] > 0) {
+    //             var height = map[x][z];
     //             for (var y = 0; y < height; y++) {
     //                 var w = new Cube();
-    //                 w.textureNum = 0;  // Add the ground texture or wall texture
-    //                 w.color = [0.5, 0.5, 0.5, 1.0];
-    //                 // w.matrix.setTranslate(x, y, z); // Translate each wall piece according to x, y, z
-    //                 // w.matrix.translate(-0.5, 0, -0.5);
-
-    //                 walls.push(w); // Push the wall to the array
-    //                 // w.render();  // Render the wall
+    //                 w.textureNum = 0;  
+    //                 // w.matrix.scale(0.5, 0.5, 0.5);
+    //                 w.color = [0.5, 0.5, 0.5, 1.0];  //
+    //                 w.matrix.translate(x - map.length / 2, y - 0.75, z - map.length / 2);
+    //                 walls.push(w);
+    //                 w.render();  
     //             }
     //         }
     //     }
     // }
+    console.log("BUILDING BLOCKS BELOW")
+    console.log("Block Coords: ", blockCoords);
+    console.log('X:', blockCoords[0], 'Y:', blockCoords[1], 'Z:', blockCoords[2]);
+
+    let roundedX = Math.round(blockCoords.elements[0]);
+    let roundedY = Math.round(blockCoords.elements[1]);
+    let roundedZ = Math.round(blockCoords.elements[2]);
+
+    console.log("Rounded Coords: ", roundedX, roundedY, roundedZ);
+
+    // Now you can create and place the block at the rounded position
+    var w = new Cube();
+    w.textureNum = -1;              // uv to test
+    w.color = [0.8, 0.2, 0.2, 1.0];  // rent tint color for the block
+    w.matrix.scale(2, 2, 2);               // scale the block
+
+    // w.matrix.translate(roundedX, roundedY, roundedZ);  // Use the rounded coordinates
+
+    // walls.push(w);
+    w.render();
 }
