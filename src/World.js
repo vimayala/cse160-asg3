@@ -86,18 +86,57 @@ let u_ViewMatrix;
 let u_GlobalRotateMatrix; 
 let u_Sampler0;
 let u_Sampler1;
-
 let u_whichTexture
 let texture;
 
 var map = [
-    [1, 0, 0, 1],
-    [1, 1, 0, 1],
-    [1, 0, 0, 1],
-    [1, 1, 1, 1]
+    [3, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 2],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     1, 0, 3, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 2,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 1, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0],
+    [1, 0, 0, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 0,     0, 0, 1, 0,        0, 0, 0, 0,       0, 0, 0, 0,       0, 0, 0, 4],
 ];
 
 var walls = [];
+
+// let mapData = genMap();
+// let vertexBuffer;
+
+// function initializeMapBuffers() {
+//     vertexBuffer = gl.createBuffer();
+//     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+//     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mapData.flatMap(v => [v.x, v.y, v.z])), gl.STATIC_DRAW);
+// }
+
+
+
 
 
 // var g_eye = [0, 0, 3];
@@ -216,6 +255,7 @@ function main() {
 
     // clearCanvas();
     renderScene()
+    genMap();
     requestAnimationFrame(tick);
 }
 var g_startTime = performance.now() / 1000.0 ;
@@ -226,7 +266,7 @@ var g_magentaAnimation = false;
 
 function tick(){
     g_seconds = (performance.now() / 1000.0 - g_startTime) * 1.5;
-    updateAnimationAngles();
+    // updateAnimationAngles();
     renderScene();   
     requestAnimationFrame(tick);
 
@@ -454,16 +494,16 @@ function addActionForHTMLUI(){
     });
 }
 
-function updateAnimationAngles(){
-    if(g_yellowAnimation){
-        g_yellowAngle = 45 * Math.sin(g_seconds);
+// function updateAnimationAngles(){
+//     if(g_yellowAnimation){
+//         g_yellowAngle = 45 * Math.sin(g_seconds);
 
-    }
-    if(g_magentaAnimation){
-        g_MagentaAngle = 45 * Math.sin(2.5 * g_seconds);
-    }
+//     }
+//     if(g_magentaAnimation){
+//         g_MagentaAngle = 45 * Math.sin(2.5 * g_seconds);
+//     }
 
-}
+// }
 
 function keydown(ev){
 
@@ -506,10 +546,20 @@ function keydown(ev){
 function renderScene(){
     var startTime = performance.now();
 
+    // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    
+    // // Bind the map buffer for rendering
+    // gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+
+    // // Setup shaders and other WebGL state...
+
+    // // Draw the map (assuming it's a set of triangles or quads)
+    // gl.drawArrays(gl.TRIANGLES, 0, mapData.length);
+
     // Pass projection matrix
     var projMat = new Matrix4();
-    //                      fovy,   aspect,                 near, far
-    projMat.setPerspective(50, canvas.width / canvas.height, 1, 100);
+    //                      fov,   aspect,                 near, far
+    projMat.setPerspective(g_Camera.fov, canvas.width / canvas.height, 1, 100);
     gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
 
     var viewMat = new Matrix4();
@@ -517,6 +567,7 @@ function renderScene(){
     viewMat.setLookAt(g_Camera.eye.elements[0], g_Camera.eye.elements[1], g_Camera.eye.elements[2],     
                       g_Camera.at.elements[0], g_Camera.at.elements[1],g_Camera.at.elements[2],     
                       g_Camera.up.elements[0], g_Camera.up.elements[1],g_Camera.up.elements[2],);
+
     gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
 
 
@@ -532,38 +583,38 @@ function renderScene(){
     ground.textureNum = -3;
     ground.color = [1.0, 0.2, 0.5, 1.0];
     ground.matrix.translate(0, -0.75, 0);
-    ground.matrix.scale(50, 0, 50);
+    ground.matrix.scale(32, 0, 32);
     ground.matrix.translate(-0.5, 0, -0.5);
     ground.render();
 
 
-    var red = new Cube();
-    red.textureNum = 0
-    red.color = [1.0, 0.0, 0.0, 1.0];
-    red.matrix.translate(-0.25, -0.75, 0.0);
-    red.matrix.rotate(-5, 1, 0, 0);
-    red.matrix.scale(0.5, 0.3, 0.5);
-    red.render();
+    // var red = new Cube();
+    // red.textureNum = 0
+    // red.color = [1.0, 0.0, 0.0, 1.0];
+    // red.matrix.translate(-0.25, -0.75, 0.0);
+    // red.matrix.rotate(-5, 1, 0, 0);
+    // red.matrix.scale(0.5, 0.3, 0.5);
+    // red.render();
 
-    var yellow = new Cube();
-    yellow.textureNum = -1;
-    yellow.color = [0.0, 1.0, 0.0, 1.0];
-    yellow.matrix.translate(-0.0, -0.5, 0.0);
-    yellow.matrix.rotate(g_yellowAngle, 0.0, 0.0, 1);
-    var yellowCoordMatrix = new Matrix4(yellow.matrix);
-    yellow.matrix.scale(0.25, 0.7, 0.5);
-    yellow.matrix.translate(-0.5, 0.0, 0.0);
-    yellow.render();
+    // var yellow = new Cube();
+    // yellow.textureNum = -1;
+    // yellow.color = [0.0, 1.0, 0.0, 1.0];
+    // yellow.matrix.translate(-0.0, -0.5, 0.0);
+    // yellow.matrix.rotate(g_yellowAngle, 0.0, 0.0, 1);
+    // var yellowCoordMatrix = new Matrix4(yellow.matrix);
+    // yellow.matrix.scale(0.25, 0.7, 0.5);
+    // yellow.matrix.translate(-0.5, 0.0, 0.0);
+    // yellow.render();
 
-    var magenta = new Cube();
-    magenta.color = [1.0, 0.0, 1.0, 1.0];
-    magenta.textureNum = 0;
-    magenta.matrix = yellowCoordMatrix;
-    magenta.matrix.translate(0, 0.65, 0);
-    magenta.matrix.rotate(g_MagentaAngle, 0, 0, 1);
-    magenta.matrix.scale(0.3, 0.3, 0.3);
-    magenta.matrix.translate(-0.5, 0.0, -0.001);
-    magenta.render();
+    // var magenta = new Cube();
+    // magenta.color = [1.0, 0.0, 1.0, 1.0];
+    // magenta.textureNum = 0;
+    // magenta.matrix = yellowCoordMatrix;
+    // magenta.matrix.translate(0, 0.65, 0);
+    // magenta.matrix.rotate(g_MagentaAngle, 0, 0, 1);
+    // magenta.matrix.scale(0.3, 0.3, 0.3);
+    // magenta.matrix.translate(-0.5, 0.0, -0.001);
+    // magenta.render();
 
 
 
@@ -577,7 +628,7 @@ function renderScene(){
 
 
     var box = new Cube();
-    box.textureNum = 0;
+    // box.textureNum = 0;
     box.color = [1.0, 0.2, 0.5, 1.0];
     // box.matrix.translate(0, -1, 0);
     box.matrix.scale(0.5, 0.5, 0.5);
@@ -586,6 +637,32 @@ function renderScene(){
     // box.matrix.translate(-0.5, 0, -0.5);
     box.render();
 
+
+    // - 0.75 on y will put it on the ground
+
+    // make height be the VALUE in array
+    // if map [x] [z] > 0, build to that height
+    //          only problem, can only build up
+    // maybe not a problem?
+
+    for (var x = 0; x < map.length; x++) {
+        for (var z = 0; z < map[x].length; z++) {
+            // If the value at the current map position is 1, create a wall
+            // if (map[x][z] == 1) {
+            if (map[x][z] > 0) {
+                var height = map[x][z];
+                for (var y = 0; y < height; y++) {
+                    var w = new Cube();
+                    w.textureNum = 0;  
+                    // w.matrix.scale(0.5, 0.5, 0.5);
+                    w.color = [0.5, 0.5, 0.5, 1.0];  //
+                    w.matrix.translate(x - map.length / 2, y - 0.75, z - map.length / 2);            // Assumes squares, centers blocks in grid
+                    walls.push(w);
+                    w.render();  
+                }
+            }
+        }
+    }
 
     var duration = performance.now() - startTime;
     sendTextToHTML(" ms: " + Math.floor(duration) + " fps: " + Math.floor(10000/duration) / 10, "numdot");
@@ -600,4 +677,30 @@ function sendTextToHTML(text, htmlID){
         return;
     }
     htmlElm.innerHTML = text;
+}
+
+
+// var maxHeight = 10; // Maximum height for a wall, can be adjusted
+
+function genMap(){
+
+    // // Loop over the map
+    // for (var x = 0; x < map.length; x++) {
+    //     for (var z = 0; z < map[x].length; z++) {
+    //         // If the value at the current map position is 1, create a "wall" at height
+    //         if (map[x][z] == 1) {
+    //             var height = map[x][z] * 3;
+    //             for (var y = 0; y < height; y++) {
+    //                 var w = new Cube();
+    //                 w.textureNum = 0;  // Add the ground texture or wall texture
+    //                 w.color = [0.5, 0.5, 0.5, 1.0];
+    //                 // w.matrix.setTranslate(x, y, z); // Translate each wall piece according to x, y, z
+    //                 // w.matrix.translate(-0.5, 0, -0.5);
+
+    //                 walls.push(w); // Push the wall to the array
+    //                 // w.render();  // Render the wall
+    //             }
+    //         }
+    //     }
+    // }
 }
