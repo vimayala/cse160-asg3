@@ -194,7 +194,7 @@ let isMouseControlled = false;
 let lastX = 0;
 let lastY = 0;
 
-const distance = 5;  // The block will be placed 5 units in front of the camera
+const distance = 3;  // The block will be placed 5 units in front of the camera
 
 
 function main() {
@@ -617,7 +617,8 @@ function renderScene(){
     box.matrix.translate(0, -1.5, 0);
 
     // box.matrix.translate(-0.5, 0, -0.5);
-    box.render();
+
+    // box.render();
 
 
     // - 0.75 on y will put it on the ground
@@ -694,14 +695,21 @@ function genMap(blockCoords){
 
     console.log("Rounded Coords: ", roundedX, roundedY, roundedZ);
 
-    // Now you can create and place the block at the rounded position
-    var w = new Cube();
-    w.textureNum = -1;              // uv to test
-    w.color = [0.8, 0.2, 0.2, 1.0];  // rent tint color for the block
-    w.matrix.scale(2, 2, 2);               // scale the block
+    console.log("Map Value: ", map[roundedX+16][roundedZ+16]);
+    map[roundedX+16][roundedZ+16] += 1;
 
-    // w.matrix.translate(roundedX, roundedY, roundedZ);  // Use the rounded coordinates
+    // Now you can create and place the block at the rounded position
+    // var w = new Cube();
+    // w.textureNum = -1;              // uv to test
+    // w.color = [0.8, 0.2, 0.2, 1.0];  // rent tint color for the block
+
+    // // get map value at x, y
+    // // add one to it
+    // // 
+    // w.matrix.translate(0, 1.5, 0);  // Move first
+    // w.matrix.scale(1, 1, 1);  // Keep scale at 1x1x1 first for testing
+    //     // box.matrix.translate(0, -1.5, 0);
 
     // walls.push(w);
-    w.render();
+    // w.render();
 }
